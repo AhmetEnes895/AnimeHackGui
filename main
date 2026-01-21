@@ -1,0 +1,117 @@
+local player = game.Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
+
+-- Eski GUI temizliği
+if player.PlayerGui:FindFirstChild("AnimeSecretMenu") then player.PlayerGui.AnimeSecretMenu:Destroy() end
+
+local sg = Instance.new("ScreenGui", player.PlayerGui)
+sg.Name = "AnimeSecretMenu"
+
+----------------------------------------------------------------
+-- 1. SECRET BUTONU (Neon Mor Kenarlıklı)
+----------------------------------------------------------------
+local secretBtn = Instance.new("TextButton", sg)
+secretBtn.Size = UDim2.new(0, 100, 0, 40) 
+secretBtn.Position = UDim2.new(0.05, 0, 0.5, 0) 
+secretBtn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+secretBtn.Text = "SECRET"
+secretBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+secretBtn.Font = Enum.Font.GothamBold
+secretBtn.TextSize = 16
+Instance.new("UICorner", secretBtn)
+
+local sStroke = Instance.new("UIStroke", secretBtn)
+sStroke.Color = Color3.fromRGB(191, 0, 255) -- Neon Mor
+sStroke.Thickness = 2
+
+----------------------------------------------------------------
+-- 2. ANA PANEL (Neon Mor Kenarlıklı)
+----------------------------------------------------------------
+local mainFrame = Instance.new("Frame", sg)
+mainFrame.Size = UDim2.new(0, 420, 0, 230) 
+mainFrame.Position = UDim2.new(0.5, -210, 0.5, -115) 
+mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+mainFrame.Visible = false 
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 20)
+
+local fStroke = Instance.new("UIStroke", mainFrame)
+fStroke.Color = Color3.fromRGB(191, 0, 255) -- Full Neon Mor
+fStroke.Thickness = 4 -- Daha belirgin neon etkisi için kalınlaştırıldı
+
+----------------------------------------------------------------
+-- 3. BUTONLAR
+----------------------------------------------------------------
+
+-- ANİME TELEPORT (BÜYÜK RESİMLİ)
+local animeBtn = Instance.new("TextButton", mainFrame)
+animeBtn.Size = UDim2.new(0, 180, 0, 180)
+animeBtn.Position = UDim2.new(0, 20, 0, 25)
+animeBtn.Text = "ANİME TP"
+animeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+animeBtn.Font = Enum.Font.GothamBold
+animeBtn.TextSize = 22
+animeBtn.ZIndex = 2
+animeBtn.BackgroundTransparency = 0.3
+animeBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Instance.new("UICorner", animeBtn).CornerRadius = UDim.new(0, 20)
+
+local img = Instance.new("ImageLabel", animeBtn)
+img.Size = UDim2.new(1, 0, 1, 0)
+img.Image = "rbxassetid://5196079294"
+img.BackgroundTransparency = 1
+img.ScaleType = Enum.ScaleType.Stretch
+img.ZIndex = 1
+Instance.new("UICorner", img).CornerRadius = UDim.new(0, 20)
+
+-- VIP SİL (YANINDA)
+local vipBtn = Instance.new("TextButton", mainFrame)
+vipBtn.Size = UDim2.new(0, 180, 0, 180)
+vipBtn.Position = UDim2.new(0, 220, 0, 25)
+vipBtn.Text = "👑 VIP SİL 👑"
+vipBtn.Font = Enum.Font.GothamBold
+vipBtn.TextSize = 22
+vipBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+Instance.new("UICorner", vipBtn).CornerRadius = UDim.new(0, 20)
+
+local grad = Instance.new("UIGradient", vipBtn)
+grad.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+}
+
+----------------------------------------------------------------
+-- MANTIK (LOGIC)
+----------------------------------------------------------------
+
+secretBtn.MouseButton1Click:Connect(function()
+    mainFrame.Visible = not mainFrame.Visible
+end)
+
+animeBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        local tps = {}
+        for _, v in pairs(workspace.Map.TPZone:GetChildren()) do 
+            if v.Name == "TP" then table.insert(tps, v) end 
+        end
+        if #tps > 0 then
+            player.Character.HumanoidRootPart.CFrame = tps[math.random(1, #tps)].CFrame * CFrame.new(0, 3, 0)
+        end
+    end)
+end)
+
+vipBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        workspace.Map.VIPZones:ClearAllChildren()
+        vipBtn.Text = "✅ SİLİNDİ"
+        wait(1)
+        vipBtn.Text = "👑 VIP SİL 👑"
+    end)
+end)
+
+local function drag(o)
+    local d, s, p
+    o.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then d = true s = input.Position p = o.Position end end)
+    UIS.InputChanged:Connect(function(input) if d and input.UserInputType == Enum.UserInputType.MouseMovement then local del = input.Position - s o.Position = UDim2.new(p.X.Scale, p.X.Offset + del.X, p.Y.Scale, p.Y.Offset + del.Y) end end)
+    UIS.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then d = false end end)
+end
+drag(secretBtn) drag(mainFrame)
