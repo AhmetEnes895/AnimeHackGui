@@ -2,13 +2,15 @@ local player = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 
 -- Eski GUI temizliği
-if player.PlayerGui:FindFirstChild("AnimeSecretMenu") then player.PlayerGui.AnimeSecretMenu:Destroy() end
+local systemName = "AnimeSecretMenu"
+if player.PlayerGui:FindFirstChild(systemName) then player.PlayerGui[systemName]:Destroy() end
 
 local sg = Instance.new("ScreenGui", player.PlayerGui)
-sg.Name = "AnimeSecretMenu"
+sg.Name = systemName
+sg.ResetOnSpawn = false
 
 ----------------------------------------------------------------
--- 1. SECRET BUTONU (Neon Mor Kenarlıklı)
+-- 1. SECRET BUTONU
 ----------------------------------------------------------------
 local secretBtn = Instance.new("TextButton", sg)
 secretBtn.Size = UDim2.new(0, 100, 0, 40) 
@@ -19,95 +21,133 @@ secretBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 secretBtn.Font = Enum.Font.GothamBold
 secretBtn.TextSize = 16
 Instance.new("UICorner", secretBtn)
-
 local sStroke = Instance.new("UIStroke", secretBtn)
-sStroke.Color = Color3.fromRGB(191, 0, 255) -- Neon Mor
+sStroke.Color = Color3.fromRGB(191, 0, 255)
 sStroke.Thickness = 2
 
 ----------------------------------------------------------------
--- 2. ANA PANEL (Neon Mor Kenarlıklı)
+-- 2. ANA PANEL (SCROLLINGFRAME)
 ----------------------------------------------------------------
 local mainFrame = Instance.new("Frame", sg)
-mainFrame.Size = UDim2.new(0, 420, 0, 230) 
-mainFrame.Position = UDim2.new(0.5, -210, 0.5, -115) 
+mainFrame.Size = UDim2.new(0, 435, 0, 250) 
+mainFrame.Position = UDim2.new(0.5, -217, 0.5, -125) 
 mainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 mainFrame.Visible = false 
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 20)
-
 local fStroke = Instance.new("UIStroke", mainFrame)
-fStroke.Color = Color3.fromRGB(191, 0, 255) -- Full Neon Mor
-fStroke.Thickness = 4 -- Daha belirgin neon etkisi için kalınlaştırıldı
+fStroke.Color = Color3.fromRGB(191, 0, 255)
+fStroke.Thickness = 4
+
+local scroll = Instance.new("ScrollingFrame", mainFrame)
+scroll.Size = UDim2.new(1, -20, 1, -20)
+scroll.Position = UDim2.new(0, 10, 0, 10)
+scroll.BackgroundTransparency = 1
+scroll.BorderSizePixel = 0
+scroll.ScrollBarThickness = 4
+scroll.ScrollBarImageColor3 = Color3.fromRGB(191, 0, 255)
+scroll.CanvasSize = UDim2.new(0, 0, 0, 450)
 
 ----------------------------------------------------------------
 -- 3. BUTONLAR
 ----------------------------------------------------------------
 
--- ANİME TELEPORT (BÜYÜK RESİMLİ)
-local animeBtn = Instance.new("TextButton", mainFrame)
+-- ANİME TELEPORT
+local animeBtn = Instance.new("TextButton", scroll)
 animeBtn.Size = UDim2.new(0, 180, 0, 180)
-animeBtn.Position = UDim2.new(0, 20, 0, 25)
+animeBtn.Position = UDim2.new(0, 10, 0, 10)
 animeBtn.Text = "ANİME TP"
 animeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 animeBtn.Font = Enum.Font.GothamBold
 animeBtn.TextSize = 22
-animeBtn.ZIndex = 2
-animeBtn.BackgroundTransparency = 0.3
-animeBtn.BackgroundColor3 = Color3.fromRGB(0,0,0)
+animeBtn.ZIndex = 5
+animeBtn.BackgroundTransparency = 1 
 Instance.new("UICorner", animeBtn).CornerRadius = UDim.new(0, 20)
 
-local img = Instance.new("ImageLabel", animeBtn)
-img.Size = UDim2.new(1, 0, 1, 0)
-img.Image = "rbxassetid://5196079294"
-img.BackgroundTransparency = 1
-img.ScaleType = Enum.ScaleType.Stretch
-img.ZIndex = 1
-Instance.new("UICorner", img).CornerRadius = UDim.new(0, 20)
+local img1 = Instance.new("ImageLabel", animeBtn)
+img1.Size = UDim2.new(1, 0, 1, 0)
+img1.Image = "rbxassetid://5196079294" 
+img1.BackgroundTransparency = 1
+img1.ScaleType = Enum.ScaleType.Stretch
+img1.ZIndex = 1
+Instance.new("UICorner", img1).CornerRadius = UDim.new(0, 20)
 
--- VIP SİL (YANINDA)
-local vipBtn = Instance.new("TextButton", mainFrame)
+-- VIP SİL
+local vipBtn = Instance.new("TextButton", scroll)
 vipBtn.Size = UDim2.new(0, 180, 0, 180)
-vipBtn.Position = UDim2.new(0, 220, 0, 25)
+vipBtn.Position = UDim2.new(0, 210, 0, 10)
 vipBtn.Text = "👑 VIP SİL 👑"
 vipBtn.Font = Enum.Font.GothamBold
 vipBtn.TextSize = 22
 vipBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+vipBtn.ZIndex = 5
 Instance.new("UICorner", vipBtn).CornerRadius = UDim.new(0, 20)
+local gradVIP = Instance.new("UIGradient", vipBtn)
+gradVIP.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))}
 
-local grad = Instance.new("UIGradient", vipBtn)
-grad.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 0)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-}
+-- JUMP 200 (SİYAH YAZI + SARI DIŞ ÇERÇEVE)
+local jumpBtn = Instance.new("TextButton", scroll)
+jumpBtn.Size = UDim2.new(0, 180, 0, 180)
+jumpBtn.Position = UDim2.new(0, 10, 0, 210)
+jumpBtn.Text = "JUMP 200"
+jumpBtn.TextColor3 = Color3.fromRGB(0, 0, 0) -- YAZI SİYAH YAPILDI
+jumpBtn.Font = Enum.Font.GothamBold
+jumpBtn.TextSize = 22
+jumpBtn.ZIndex = 5
+jumpBtn.BackgroundTransparency = 1 -- Invis
+Instance.new("UICorner", jumpBtn).CornerRadius = UDim.new(0, 20)
+
+-- Butonun Dışındaki Sarı Çizgi
+local jStroke = Instance.new("UIStroke", jumpBtn)
+jStroke.Color = Color3.fromRGB(255, 255, 0) 
+jStroke.Thickness = 4
+
+local img2 = Instance.new("ImageLabel", jumpBtn)
+img2.Size = UDim2.new(1, 0, 1, 0)
+img2.Image = "rbxassetid://6923430367" 
+img2.BackgroundTransparency = 1
+img2.ScaleType = Enum.ScaleType.Stretch
+img2.ZIndex = 1
+Instance.new("UICorner", img2).CornerRadius = UDim.new(0, 20)
 
 ----------------------------------------------------------------
 -- MANTIK (LOGIC)
 ----------------------------------------------------------------
 
-secretBtn.MouseButton1Click:Connect(function()
-    mainFrame.Visible = not mainFrame.Visible
-end)
+secretBtn.MouseButton1Click:Connect(function() mainFrame.Visible = not mainFrame.Visible end)
 
 animeBtn.MouseButton1Click:Connect(function()
     pcall(function()
         local tps = {}
-        for _, v in pairs(workspace.Map.TPZone:GetChildren()) do 
-            if v.Name == "TP" then table.insert(tps, v) end 
-        end
-        if #tps > 0 then
-            player.Character.HumanoidRootPart.CFrame = tps[math.random(1, #tps)].CFrame * CFrame.new(0, 3, 0)
-        end
+        for _, v in pairs(workspace.Map.TPZone:GetChildren()) do if v.Name == "TP" then table.insert(tps, v) end end
+        if #tps > 0 then player.Character.HumanoidRootPart.CFrame = tps[math.random(1, #tps)].CFrame * CFrame.new(0, 3, 0) end
     end)
 end)
 
 vipBtn.MouseButton1Click:Connect(function()
     pcall(function()
         workspace.Map.VIPZones:ClearAllChildren()
-        vipBtn.Text = "✅ SİLİNDİ"
-        wait(1)
-        vipBtn.Text = "👑 VIP SİL 👑"
+        vipBtn.Text = "SİLİNDİ LA"
+        task.wait(1)
+        vipBtn.Text = "👑VIP OL(Fakirsin)👑"
     end)
 end)
 
+jumpBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        local hum = player.Character:FindFirstChildOfClass("Humanoid")
+        if hum then hum.JumpPower = 200 hum.UseJumpPower = true end
+        if workspace.Map:FindFirstChild("TopBounds") then workspace.Map.TopBounds:ClearAllChildren() end
+        if workspace:FindFirstChild("Ring") then workspace.Ring:ClearAllChildren() end
+        if workspace.Map:FindFirstChild("WorldBorder") and workspace.Map.WorldBorder:FindFirstChild("InvisBorder") then
+            workspace.Map.WorldBorder.InvisBorder:ClearAllChildren()
+        end
+        jumpBtn.Text = "UÇUYON LA"
+        task.wait(1)
+        jumpBtn.Text = "RONALDO JUMP"
+    end)
+end)
+
+-- Sürükleme
 local function drag(o)
     local d, s, p
     o.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then d = true s = input.Position p = o.Position end end)
